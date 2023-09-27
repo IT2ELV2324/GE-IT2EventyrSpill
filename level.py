@@ -113,19 +113,20 @@ class Level:
 
         if (option == "Ned"):
             self.player.ypos = self.player.ypos + \
-                1 if (self.player.ypos - self.player.speed <
-                      self.current_room.size_y-1) else self.current_room.size_y-1
+                self.player.speed if (self.player.ypos - self.player.speed <
+                                      self.current_room.size_y-1) else self.current_room.size_y-1
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Venstre"):
             self.player.xpos = self.player.xpos - \
-                1 if (self.player.xpos - self.player.speed > 0) else 0
+                self.player.speed if (
+                    self.player.xpos - self.player.speed > 0) else 0
 
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Høyre"):
             self.player.xpos = self.player.xpos + \
-                1 if (self.player.xpos < self.current_room.size_x -
-                      1) else self.current_room.size_x-1
+                self.player.speed if (self.player.xpos < self.current_room.size_x -
+                                      1) else self.current_room.size_x-1
 
             self.draw_room_with_choices(additional_choices)

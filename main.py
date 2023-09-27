@@ -11,13 +11,13 @@ from level import Level
 
 
 
-p = Player(xpos=2,ypos=2, speed=1)
+p = Player(xpos=2,ypos=2, speed=2)
 
 cave = Cave()
 dungon = Dungeon()
 bridge = Bridge()
 field = Field()
-forest = Forest()
+forest = Forest(sizex=50,sizey=25)
 
 level = Level([cave,dungon,bridge,field,forest],p)
 
