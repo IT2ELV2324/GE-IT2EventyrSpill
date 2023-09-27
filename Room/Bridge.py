@@ -2,5 +2,5 @@ import index as room
 
 
 class Bridge(room.Room):
-    def __init__(self, name="Bro",  description="Du befinner deg nå på en bro og ser en fiende foran deg", enemy= "", distance = 40):
-        super().__init__(name, description, enemy, distance)
+    def __init__(self, name="Bro",  description="Du befinner deg nå på en bro og ser en fiende foran deg", enemy= "", sizex= 12, sizey = 4):
+        super().__init__(name, description, enemy, sizex, sizey,)
