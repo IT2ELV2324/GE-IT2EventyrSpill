@@ -1,4 +1,4 @@
-
+from ..Enemy import Slemsing
 
 class Room():
     def __init__(self, name, description, enemy, sizex, sizey,):
@@ -17,7 +17,7 @@ class Room():
 
 
 class Boss_Room(Room):
-    def __init__(self, name, description="Du befinner deg nå i et rom med en diger trone og ser en fiende foran deg", enemy="Slemsing", sizex= 8, sizey = 8):
+    def __init__(self, name, description="Du befinner deg nå i et rom med en diger trone og ser en fiende foran deg", enemy= Slemsing(), sizex= 8, sizey = 8):
         super().__init__(name, description, enemy, sizex, sizey)
 
 
