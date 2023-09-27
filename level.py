@@ -24,12 +24,15 @@ class formats:
 
 
 class Level:
-    def __init__(self, rooms, player):
+    def __init__(self, rooms, player, defx=0, defy=0):
         self.rooms = rooms
         self.player = player
+        self.defy = defy
+        self.defx = defx
 
     def pick_room(self):
         choices = []
+        self.player.xpos, self.player.ypos = self.defx, self.defy
         for room in self.rooms:
             choices.append(room.name)
         option, index = pick(choices, "Velg et rom",
@@ -52,7 +55,7 @@ class Level:
                 if x == self.player.xpos and y == self.player.ypos:
                     room_fill.append(self.player.apperance)
                 else:
-                    room_fill.append("  ")
+                    room_fill.append(self.current_room.empty_material)
 
         i = 1
         for y in range(0, self.current_room.size_y):

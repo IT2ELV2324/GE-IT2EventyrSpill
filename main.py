@@ -10,7 +10,7 @@ from level import Level
 
 
 
-p = Player(xpos=1,ypos=1, speed=1)
+p = Player(xpos=2,ypos=2, speed=1)
 
 cave = Cave()
 dungon = Dungeon()
