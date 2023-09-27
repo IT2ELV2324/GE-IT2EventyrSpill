@@ -1,4 +1,4 @@
-import Room_Class as room
+import index as room
 
 
 class Cave(room.Room):
