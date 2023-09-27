@@ -1,4 +1,5 @@
 from Classes.index import Player
+from Classes.Assassin import Assassin
 
 from Room.Cave import Cave
 from Room.Dungeon import Dungeon
@@ -23,10 +24,15 @@ level = Level([cave,dungon,bridge,field,forest],p)
 def say_hi():
     print("hade!")
 
+def become_assasin():
+    level.player = Assassin()
+    new_room()
+
 def new_room():
     level.pick_room()
     level.draw_room_with_choices({
     "Si hade": say_hi,
+    "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room
 })
 
