@@ -38,7 +38,6 @@ class Level:
 
     def set_scene(self, room_index):
         self.current_room = self.rooms[room_index]
-        self.rooms.remove(self.rooms[room_index])
 
     def draw_room(self):
         system("cls")
@@ -51,7 +50,7 @@ class Level:
         for y in range(0, self.current_room.size_y):
             for x in range(0, self.current_room.size_x):
                 if x == self.player.xpos and y == self.player.ypos:
-                    room_fill.append("😱")
+                    room_fill.append(self.player.apperance)
                 else:
                     room_fill.append("  ")
 
@@ -59,22 +58,22 @@ class Level:
         for y in range(0, self.current_room.size_y):
             if (y == 0):
                 for x in range(0, self.current_room.size_x+2):
-                    print("🧱", end="")
+                    print(self.current_room.material, end="")
                 print("")
             for x in range(0, self.current_room.size_x):
                 if x == 0:
-                    print("🧱", end="")
+                    print(self.current_room.material, end="")
 
                 print(room_fill[i], end="")
                 if x == self.current_room.size_x-1:
-                    print("🧱", end="")
+                    print(self.current_room.material, end="")
                 i += 1
 
             print("")
             tekst = ""
             if y == self.current_room.size_y-1:
                 for x in range(0, self.current_room.size_x+2):
-                    tekst += "🧱"
+                    tekst += self.current_room.material
                 tekst += "\n"
             print(tekst, end="")
         input("Press Enter for å se valg. ")

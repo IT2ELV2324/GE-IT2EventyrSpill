@@ -7,4 +7,4 @@ enemies = [Goblin, Warrior]
 
 class Cave(Room):
     def __init__(self, name="Hule",  description="Du befinner deg nå i en hule og ser en fiende foran deg", enemy= enemies[randint(0, len(enemies)-1)](), sizex = 5, sizey = 4,):
-        super().__init__(name, description, enemy, sizex, sizey,)
+        super().__init__(name, description, enemy, sizex, sizey, material="🪨 ")
