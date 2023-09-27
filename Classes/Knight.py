@@ -1,4 +1,4 @@
-import index as idx
+from Enemy.index import Enemydx
 
 class Knight(idx.Player):
     def __init__(self, hp=70, attack=4, name="Knight",reach=2,speed=2):

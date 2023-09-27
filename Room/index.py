@@ -1,4 +1,4 @@
-from ..Enemy import Slemsing
+from Enemy.Slemsing import Boss as Slemsing
 
 class Room():
     def __init__(self, name, description, enemy, sizex, sizey,):
