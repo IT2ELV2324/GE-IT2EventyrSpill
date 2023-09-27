@@ -1,5 +1,5 @@
 from pick import pick
-from time import sleep
+from os import system
 
 class Level:
     def __init__(self, rooms, player):
@@ -24,7 +24,7 @@ class Level:
                 if x == self.player.x and y == self.player.y:
                     room_fill.append("x")
                 else:
-                    room_fill.append("y")
+                    room_fill.append(" ")
 
         i = 1
         for y in range(0,self.current_room.y):
@@ -51,19 +51,39 @@ class Level:
                 tekst += "\n"
             print(tekst, end="")
         input("Press Enter for å se valg. ")
+        system("cls")
 
     
 
     
     def draw_room_with_choices(self, choices):
         self.draw_room()
+        choices.append("Se brettet")
         option, index = pick(choices, "Velg hva du vil gjøre", indicator='=>', default_index=0, )
+        if (index == len(choices)-1):
+            choices.pop()
+            self.draw_room_with_choices(choices=choices)  
 
+        # EXAMPLE 
+        if (option == "Opp"):
+            self.player.y = self.player.y - 1 if (self.player.y is not 0) else self.current_room.y-1
+            choices.pop()
+            self.draw_room_with_choices(choices=choices)  
 
+        if (option == "Ned"):
+            self.player.y = self.player.y + 1 if (self.player.y is not self.current_room.y-1) else 0
+            choices.pop()
+            self.draw_room_with_choices(choices=choices)  
 
+        if (option == "Venstre"):
+            self.player.x = self.player.x - 1 if (self.player.x is not 0) else self.current_room.x-1
+            choices.pop()
+            self.draw_room_with_choices(choices=choices)  
 
-         
-        
+        if (option == "Høyre"):
+            self.player.x = self.player.x + 1 if (self.player.x is not self.current_room.x-1) else 0
+            choices.pop()
+            self.draw_room_with_choices(choices=choices)  
 
 class Room:
     def __init__(self, x,y):
@@ -82,4 +102,4 @@ r2 = Room(x=5,y=5)
 p = Player(x=1,y=1)
 level = Level([r1,r2],p)
 level.pick_room()
-level.draw_room_with_choices(["1","2"])
+level.draw_room_with_choices(["Opp","Ned","Venstre","Høyre"])
