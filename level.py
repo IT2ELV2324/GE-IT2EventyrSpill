@@ -1,6 +1,8 @@
 from pick import pick
 from os import system
 from Room.Cave import Cave
+from Classes.index import Player
+
 
 class formats:
     Bold = "\x1b[1m"
@@ -20,16 +22,18 @@ class formats:
     Reset_Reverse = "\x1b[27m"
     Reset_Hidden = "\x1b[28m"
 
+
 class Level:
     def __init__(self, rooms, player):
         self.rooms = rooms
         self.player = player
-    
+
     def pick_room(self):
         choices = []
         for room in self.rooms:
             choices.append(room.name)
-        option, index = pick(choices, "Velg et rom", indicator='=>', default_index=0)
+        option, index = pick(choices, "Velg et rom",
+                             indicator='=>', default_index=0)
         self.set_scene(index)
 
     def set_scene(self, room_index):
@@ -41,90 +45,85 @@ class Level:
         room_fill = [""]
 
         # Bold
-        print(formats.Bold  + self.current_room.name + formats.Reset)
+        print(formats.Bold + self.current_room.name + formats.Reset)
         print(formats.Italic + self.current_room.description + formats.Reset_Italic)
 
-        for y in range(0,self.current_room.size_y):
-            for x in range(0,self.current_room.size_x):
-                if x == self.player.x and y == self.player.y:
+        for y in range(0, self.current_room.size_y):
+            for x in range(0, self.current_room.size_x):
+                if x == self.player.xpos and y == self.player.ypos:
                     room_fill.append("😱")
                 else:
                     room_fill.append("  ")
 
         i = 1
-        accounted_for_double = False
-        for y in range(0,self.current_room.size_y):
+        for y in range(0, self.current_room.size_y):
             if (y == 0):
-                for x in range(0,self.current_room.size_x+2):
+                for x in range(0, self.current_room.size_x+2):
                     print("🧱", end="")
                 print("")
-            for x in range(0,self.current_room.size_x):
+            for x in range(0, self.current_room.size_x):
                 if x == 0:
                     print("🧱", end="")
-              
+
                 print(room_fill[i], end="")
                 if x == self.current_room.size_x-1:
                     print("🧱", end="")
                 i += 1
-                
-          
+
             print("")
             tekst = ""
-            if y ==self.current_room.size_y-1:
-                for x in range(0,self.current_room.size_x+2):
+            if y == self.current_room.size_y-1:
+                for x in range(0, self.current_room.size_x+2):
                     tekst += "🧱"
                 tekst += "\n"
             print(tekst, end="")
         input("Press Enter for å se valg. ")
 
-    
-
-    
-    def draw_room_with_choices(self, choices):
+    def draw_room_with_choices(self, additional_choices):
         self.draw_room()
-        choices.append("Se brettet")
-        option, index = pick(choices, "Velg hva du vil gjøre", indicator='=>', default_index=0, )
-        if (index == len(choices)-1):
-            choices.pop()
-            self.draw_room_with_choices(choices=choices)  
 
-        # EXAMPLE 
+        choices = []
+        if (self.player.ypos != 0):
+            choices.append("Opp")
+        if (self.player.ypos != self.current_room.size_y-1):
+            choices.append("Ned")
+        if (self.player.xpos != 0):
+            choices.append("Venstre")
+
+        if (self.player.xpos != self.current_room.size_x-1):
+            choices.append("Høyre")
+
+        option, index = pick([*choices, *additional_choices.keys(), "Se brettet"],
+                             "Velg hva du vil gjøre", indicator='=>', default_index=0, )
+
+        if (option in additional_choices.keys()):
+            additional_choices[option]()
+
+        if (option == "Se brettet"):
+            self.draw_room_with_choices(additional_choices)
+
         if (option == "Opp"):
-            self.player.y = self.player.y - 1 if (self.player.y != 0) else self.current_room.size_y-1
-            choices.pop()
-            self.draw_room_with_choices(choices=choices)  
+            self.player.ypos = self.player.ypos - \
+                self.player.speed if (
+                    self.player.ypos - self.player.speed > 0) else 0
+
+            self.draw_room_with_choices(additional_choices)
 
         if (option == "Ned"):
-            self.player.y = self.player.y + 1 if (self.player.y != self.current_room.size_y-1) else 0
-            choices.pop()
-            self.draw_room_with_choices(choices=choices)  
+            self.player.ypos = self.player.ypos + \
+                1 if (self.player.ypos - self.player.speed <
+                      self.current_room.size_y-1) else self.current_room.size_y-1
+            self.draw_room_with_choices(additional_choices)
 
         if (option == "Venstre"):
-            self.player.x = self.player.x - 1 if (self.player.x != 0) else self.current_room.size_x-1
-            choices.pop()
-            self.draw_room_with_choices(choices=choices)  
+            self.player.xpos = self.player.xpos - \
+                1 if (self.player.xpos - self.player.speed > 0) else 0
+
+            self.draw_room_with_choices(additional_choices)
 
         if (option == "Høyre"):
-            self.player.x = self.player.x + 1 if (self.player.x != self.current_room.size_x-1) else 0
-            choices.pop()
-            self.draw_room_with_choices(choices=choices)  
+            self.player.xpos = self.player.xpos + \
+                1 if (self.player.xpos < self.current_room.size_x -
+                      1) else self.current_room.size_x-1
 
-class Room:
-    def __init__(self, x,y):
-        self.x=x
-        self.y=y
-        self.title ="Room 1"
-
-class Player:
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
-
-
-r1 = Room(x=10,y=5)
-r2 = Room(x=5,y=5)
-p = Player(x=1,y=1)
-cave = Cave()
-level = Level([cave],p)
-level.pick_room()
-level.draw_room_with_choices(["Opp","Ned","Venstre","Høyre"])
+            self.draw_room_with_choices(additional_choices)
