@@ -1,4 +1,5 @@
 import index as i
 
-sentinel = i.Enemy (175, "Sentinel", 15, 5, 0 )
-
+class Sentinel(i.Enemey):
+    def __init__(self, hp = 70, name = "Sentinel", attack = 4, speed = 2, reach = 1):
+       super().__init__(hp, name, attack, speed, reach) 

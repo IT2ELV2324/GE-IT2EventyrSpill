@@ -1,5 +1,5 @@
 class Enemy:
-    def __init__(self, hp, name, attack, speed, reach):
+    def __init__(self, hp = 40, name = "Goon", attack = 3, speed = 2, reach = 1):
         self.hp = hp
         self.name = name
         self.attack = attack
@@ -7,9 +7,7 @@ class Enemy:
         self.reach = reach
 
 
-class Boss(Enemy):
-    def __init__(self, hp, name, attack, speed, reach):
-        super().__init__(hp, name, attack, speed, reach)
+
 
 
 
