@@ -1,13 +1,15 @@
-from ..Enemy import Slemsing
+from Enemy.Slemsing import Boss as Slemsing
 
 class Room():
-    def __init__(self, name, description, enemy, sizex, sizey,):
+    def __init__(self, name, description, enemy, sizex, sizey, material = "🧱", empty_material="  "):
 
         self.name = name
         self.description = description
         self.enemy = enemy
         self.size_x = sizex
         self.size_y = sizey
+        self.material = material
+        self.empty_material = empty_material
 
 
     def describe(self):

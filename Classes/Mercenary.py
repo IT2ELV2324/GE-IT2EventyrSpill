@@ -1,5 +1,5 @@
-import index as idx
+from Classes.index import Player
 
-class Mercenary(idx.Player):
+class Mercenary(Player):
     def __init__(self, hp=40, attack=5, name="Mercenary",reach=4,speed=4,xpos=10,ypos=0):
-      super.__init__(hp, attack,name,reach,speed,xpos,ypos)
+      super().__init__(hp, attack,name,reach,speed,xpos,ypos)
