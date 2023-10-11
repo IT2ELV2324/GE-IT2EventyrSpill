@@ -8,4 +8,5 @@ while (abs(Player.xpos - Enemy.xpos) <= Player.reach):
     print(f"Du slo {Enemy.name} og gjorde {Player.attack} dmg, du har {Enemy.hp} hp igjen." )
     if Enemy.hp <= 0:
         print(f"Du drepte{Enemy.name}")
+        #kjør evt. en levelUp funskjon
         break
