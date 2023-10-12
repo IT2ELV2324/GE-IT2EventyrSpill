@@ -20,7 +20,13 @@ field = Field()
 forest = Forest(sizex=50,sizey=25)
 
 level = Level([cave,dungon,bridge,field,forest],p)
-
+level.print_story([
+    'Du gikk en tur i skogen og kom over en hule.',
+'Ut av hulen kom det en musikk fylt av sorg og håp.',
+'Musikken trekker deg inn. Gjennom hulen kommer du til et mystisk sted.',
+'Alt du klarer å tenke på er å slå den onde Slemsing.',
+'En raspete dame stemme snakker til deg: "Hva er din historie?"'
+])
 def say_hi():
     print("hade!")
 

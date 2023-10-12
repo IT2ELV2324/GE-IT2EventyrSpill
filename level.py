@@ -115,6 +115,24 @@ class Level:
         print("Trykk på enter for å fortsette")
         keyboard.wait("enter")
 
+    def print_story(self, story):
+        # Press enter to skip the story
+        isSkipping = False
+        def skip_story():
+            nonlocal isSkipping
+            isSkipping = True
+        keyboard.add_hotkey('enter', skip_story)
+            
+        for line in story:
+            for char in line:
+                if (isSkipping):
+                    break
+                print(char, end='', flush=True)
+                time.sleep(0.05)
+            print()  # New line after each story line
+            if (isSkipping):
+                break
+            time.sleep(1)  # Wait a second before the next line
 
     def draw_room_with_choices(self, additional_choices):
         self.draw_room()
@@ -140,28 +158,23 @@ class Level:
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Opp"):
-            self.player.ypos = self.player.ypos - \
-                self.player.speed if (
-                    self.player.ypos - self.player.speed > 0) else 0
+            self.player.ypos = max(
+                0, self.player.ypos - self.player.speed)
 
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Ned"):
-            self.player.ypos = self.player.ypos + \
-                self.player.speed if (self.player.ypos - self.player.speed <
-                                      self.current_room.size_y-1) else self.current_room.size_y-1
+            self.player.ypos =             min(self.current_room.size_y-1, self.player.ypos + self.player.speed)
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Venstre"):
-            self.player.xpos = self.player.xpos - \
-                self.player.speed if (
-                    self.player.xpos - self.player.speed > 0) else 0
+            self.player.xpos =max(0, self.player.xpos - self.player.speed)
 
             self.draw_room_with_choices(additional_choices)
 
         if (option == "Høyre"):
-            self.player.xpos = self.player.xpos + \
-                self.player.speed if (self.player.xpos < self.current_room.size_x -
-                                      1) else self.current_room.size_x-1
+            self.player.xpos = min(
+                self.current_room.size_x-1, self.player.xpos + self.player.speed)
+            
 
             self.draw_room_with_choices(additional_choices)
