@@ -1,7 +1,9 @@
-from pick import pick
+import keyboard
+
 from os import system
 from Room.Cave import Cave
 from Classes.index import Player
+import time
 
 
 class formats:
@@ -22,6 +24,37 @@ class formats:
     Reset_Reverse = "\x1b[27m"
     Reset_Hidden = "\x1b[28m"
 
+def pick_with_keyboard(options):
+    time.sleep(0.2)
+    current_index = 0
+
+    # Display the initial menu
+    def display_menu(index):
+        print("\033c", end="")  # Clear the console
+        for idx, option in enumerate(options):
+            if idx == index:
+                print(f"=> {option}")  # Indicate the current selection with an arrow
+            else:
+                print(f"   {option}")
+
+    display_menu(current_index)
+
+
+    while True:
+        if keyboard.is_pressed('down'):
+            current_index = (current_index + 1) % len(options)
+            display_menu(current_index)
+            time.sleep(0.2)  # Prevents rapid cycling
+
+        elif keyboard.is_pressed('up'):
+            current_index = (current_index - 1) % len(options)
+            display_menu(current_index)
+            time.sleep(0.2)
+
+        elif keyboard.is_pressed('enter'):
+            break
+
+    return options[current_index], current_index
 
 class Level:
     def __init__(self, rooms, player, defx=0, defy=0):
@@ -35,8 +68,7 @@ class Level:
         self.player.xpos, self.player.ypos = self.defx, self.defy
         for room in self.rooms:
             choices.append(room.name)
-        option, index = pick(choices, "Velg et rom",
-                             indicator='=>', default_index=0)
+        option, index = pick_with_keyboard(choices)
         self.set_scene(index)
 
     def set_scene(self, room_index):
@@ -79,7 +111,10 @@ class Level:
                     tekst += self.current_room.material
                 tekst += "\n"
             print(tekst, end="")
-        input("Press Enter for å se valg. ")
+        print("")
+        print("Trykk på enter for å fortsette")
+        keyboard.wait("enter")
+
 
     def draw_room_with_choices(self, additional_choices):
         self.draw_room()
@@ -95,8 +130,8 @@ class Level:
         if (self.player.xpos != self.current_room.size_x-1):
             choices.append("Høyre")
 
-        option, index = pick([*choices, *additional_choices.keys(), "Se brettet"],
-                             "Velg hva du vil gjøre", indicator='=>', default_index=0, )
+
+        option, index = pick_with_keyboard([*choices, *additional_choices.keys(), "Se brettet"])
 
         if (option in additional_choices.keys()):
             additional_choices[option]()
