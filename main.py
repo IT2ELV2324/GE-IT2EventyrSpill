@@ -6,6 +6,9 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
+from Combat.index import combat_loop
+
+
 
 from level import Level
 
@@ -39,7 +42,7 @@ def new_room():
     level.draw_room_with_choices({
     "Si hade": say_hi,
     "Bli Assasin": become_assasin,
-    "Velg nytt rom": new_room
+    "Velg nytt rom": new_room,
 })
 
 new_room()

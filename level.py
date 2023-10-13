@@ -3,6 +3,7 @@ import keyboard
 from os import system
 from Room.Cave import Cave
 from Classes.index import Player
+from Classes.index import check_if_within_reach
 import time
 
 
@@ -148,6 +149,13 @@ class Level:
         if (self.player.xpos != self.current_room.size_x-1):
             choices.append("Høyre")
 
+        if (check_if_within_reach == True):
+            choices.append ("Angrip")
+        elif (check_if_within_reach == False):
+            if "Angrip" in choices():
+                choices.remove ("Angrip") 
+            else:
+                pass
 
         option, index = pick_with_keyboard([*choices, *additional_choices.keys(), "Se brettet"])
 
@@ -178,3 +186,11 @@ class Level:
             
 
             self.draw_room_with_choices(additional_choices)
+
+        if "Angrip" in option:
+            if (option == "Angrip"):
+
+             self.draw_room_with_choices(additional_choices)
+
+        if "Angrip" not in option:
+            pass
