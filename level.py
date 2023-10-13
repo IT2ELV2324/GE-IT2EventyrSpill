@@ -30,7 +30,7 @@ def pick_with_keyboard(options):
 
     # Display the initial menu
     def display_menu(index):
-        print(formats.Reset, end="")  # Clear the console
+        print("\033c", end="")  # Clear the console
         for idx, option in enumerate(options):
             if idx == index:
                 print(f"=> {option}")  # Indicate the current selection with an arrow
