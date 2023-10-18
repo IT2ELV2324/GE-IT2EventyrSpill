@@ -9,7 +9,7 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-from Combat.index import combat_loop
+
 
 
 from level import Level, pick_with_keyboard
@@ -56,6 +56,28 @@ def enemy_combat():
     while combat:
         level.player.hp -= level.current_room.enemy.attack
         combat = False
+
+def combat_loop():
+    combat = True
+    if (abs(level.player.xpos - level.current_room.enemy.xpos) <= level.player.reach 
+        and abs(level.player.ypos - level.current_room.enemy.ypos) <= level.player.reach
+        and abs(level.current_room.enemy.xpos - level.current_room.enemy.xpos) <= level.player.enemy.reach
+        and abs(level.current_room.enemy.ypos - level.player.ypos) <= level.current_room.enemy.reach):
+        combat = True
+
+    while combat:
+        print("damn")
+        if level.player.speed > level.current_room.enemy.speed:  
+            level.current_room.enemy.hp = level.current_room.enemy.hp - level.player.attack
+            level.player.hp -= level.current_room.enemy.attack
+            print(f"Du slo {level.current_room.enemy.name} og gjorde {level.player.attack} dmg, {level.current_room.enemy.name} har {level.current_room.enemy.hp} hp igjen." )
+            combat = False
+        else:
+            level.player.hp = level.player.hp - level.current_room.enemy.attack
+            level.current_room.enemy.hp -= level.player.attack
+            print(f"{level.current_room.enemy.name} slo deg og gjorde {level.current_room.enemy.attack} dmg, du har {level.player.hp} hp igjen." )
+            combat = False
+
 def movement():
     i = 0
 
@@ -90,7 +112,7 @@ def movement():
         "Beveg deg": movement,
         "Angrep": player_combat
     })
-    elif (level.player.check_if_within_reach_player(level.enemy.xpos, level.enemy.ypos) and level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
+    elif (level.player.check_if_within_reach_player(level.current_room.enemy.xpos, level.current_room.enemy.ypos) and level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
         level.draw_room_with_choices({
         "Si hade": say_hi,
         "Bli Assasin": become_assasin,
