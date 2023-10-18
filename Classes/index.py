@@ -13,7 +13,7 @@ class Player:
    
 
 
-def check_if_within_reach(self, xpos,ypos):
+def check_if_within_reach_player(self, xpos,ypos):
       if (abs(self.xpos - Enemy.xpos) <= self.reach) and abs(self.ypos - Enemy.ypos) <= self.reach:
          return True
       else:
