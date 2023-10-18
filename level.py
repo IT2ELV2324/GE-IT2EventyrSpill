@@ -4,7 +4,7 @@ from os import system
 from Room.Cave import Cave
 from Classes.index import Player
 from Classes.index import check_if_within_reach
-from Combat.index import combat_loop
+from combat.index import combat_loop
 import time
 from Enemy.index import Enemy
 

@@ -9,8 +9,8 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-from Combat.index import combat_loop
-from Classes.index import check_if_within_reach
+from combat.Player_combat import player_combat
+from Classes.index import check_if_within_reach_player
 
 
 from level import Level, pick_with_keyboard
@@ -69,13 +69,13 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         level.draw_room()
         i = i + 1
-    if (check_if_within_reach == True):
+    if (check_if_within_reach_player == True):
         level.draw_room_with_choices({
         "Si hade": say_hi,
         "Bli Assasin": become_assasin,
         "Velg nytt rom": new_room,
         "Beveg deg": movement,
-        "Angrep": combat_loop
+        "Angrep": player_combat
     })
     else: 
         level.draw_room_with_choices({
