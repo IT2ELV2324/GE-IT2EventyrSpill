@@ -50,6 +50,7 @@ def movement():
 
     while i < level.player.speed:
         choices = []
+        choices.append("Avslutt")
         if (level.player.ypos != 0):
             choices.append("Opp")
         if (level.player.ypos != level.current_room.size_y-1):
@@ -68,6 +69,9 @@ def movement():
             level.player.xpos = level.player.xpos - 1
         elif option == "Høyre":
             level.player.xpos = level.player.xpos + 1
+        elif option == "Avslutt":
+            i = level.player.speed
+            
         level.draw_room()
         i = i + 1
     level.draw_room_with_choices({
