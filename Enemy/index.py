@@ -1,5 +1,5 @@
 class Enemy:
-    def __init__(self, hp = 40, name = "Goon", attack = 3, speed = 2, reach = 1, xpos = 50, ypos = 0):
+    def __init__(self, hp = 40, name = "Goon", attack = 3, speed = 2, reach = 1, xpos = 50, ypos = 0, apperance="🤢"):
         self.hp = hp
         self.name = name
         self.attack = attack
@@ -7,6 +7,7 @@ class Enemy:
         self.reach = reach
         self.xpos = xpos
         self.ypos = ypos
+        self.apperance = apperance
 
 
 

@@ -6,7 +6,7 @@ from Classes.index import Player
 from Classes.index import check_if_within_reach
 from Combat.index import combat_loop
 import time
-
+from Enemy.index import Enemy
 
 class formats:
     Bold = "\x1b[1m"
@@ -88,8 +88,11 @@ class Level:
             for x in range(0, self.current_room.size_x):
                 if x == self.player.xpos and y == self.player.ypos:
                     room_fill.append(self.player.apperance)
+                elif x == self.current_room.enemy.xpos and y == self.current_room.enemy.ypos:
+                    room_fill.append(self.current_room.enemy.apperance)
                 else:
                     room_fill.append(self.current_room.empty_material)
+                
 
         i = 1
         for y in range(0, self.current_room.size_y):
