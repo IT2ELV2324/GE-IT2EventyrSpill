@@ -172,7 +172,7 @@ class Level:
 
         if "Angrip" in option:
             if (option == "Angrip"):
-             self.combat.index.combat_loop            
+             self.combat.index.combat_loop()            
              self.draw_room_with_choices(additional_choices)
 
         if "Angrip" not in option:
