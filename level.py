@@ -72,7 +72,7 @@ class Level:
             choices.append(room.name)
         option, index = pick_with_keyboard(choices, "Velg et rom å gå inn i: ")
         self.set_scene(index)
-
+        
     def pick_stat(self):
 
         print("\033c", end="")  # Clear the console
