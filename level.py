@@ -72,7 +72,47 @@ class Level:
             choices.append(room.name)
         option, index = pick_with_keyboard(choices, "Velg et rom å gå inn i: ")
         self.set_scene(index)
-        
+
+    def is_enemy_within_reach(self):
+        return self.player.check_if_within_reach_player(self.current_room.enemy.xpos, self.current_room.enemy.ypos)
+    
+    def combat(self):
+        while self.player.hp > 0 and self.current_room.enemy.hp > 0:
+            # Display combat menu
+            option, index = pick_with_keyboard(["Angrip", "Forsvar", "Løp"], "Velg en handling:")
+            print("\033c", end="")  # Clear the console
+            
+            
+            # Player's turn
+            if option == "Angrip":
+                print(f"{self.player.name} angriper!")
+                self.current_room.enemy.hp -= self.player.attack
+                if self.current_room.enemy.hp <= 0:
+                    print(f"{self.current_room.enemy.name} er død!")
+                    time.sleep(3)
+                    self.rooms.remove(self.current_room)  # Remove the room
+                    self.pick_room()
+                    self.draw_room_with_choices(self.ads_cache)
+                    return
+            elif option == "Forsvar":
+                # Logic for defend can be added here
+                pass
+            elif option == "Løp":
+                print(f"{self.player.name} løper vekk!")
+                self.pick_room()
+                self.draw_room_with_choices(self.ads_cache)
+                return
+            
+            # Enemy's turn
+            print(f"{self.current_room.enemy.name} angriper!")
+            self.player.hp -= self.current_room.enemy.attack
+            if self.player.hp <= 0:
+                print(f"{self.player.name} er død!")
+                time.sleep(3)
+                break
+            time.sleep(1)
+
+
     def pick_stat(self):
 
         print("\033c", end="")  # Clear the console
@@ -152,6 +192,9 @@ class Level:
     def draw_room_with_choices(self, additional_choices):
         self.draw_room()
 
+        if self.is_enemy_within_reach():
+            self.ads_cache = additional_choices
+            additional_choices["Angrip"] = self.combat
         
         option, index = pick_with_keyboard([*additional_choices.keys(), "Se stats", "Se brettet"], "Hva vil du gjøre?")
 

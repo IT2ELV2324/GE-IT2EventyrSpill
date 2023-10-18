@@ -74,6 +74,11 @@ def movement():
             
         level.draw_room()
         i = i + 1
+    if level.is_enemy_within_reach():
+        choice = input("You are within reach of an enemy. Do you want to engage in combat? (yes/no): ")
+        if choice.lower() == 'yes':
+            level.combat()
+
     level.draw_room_with_choices({
     "Si hade": say_hi,
     "Bli Assasin": become_assasin,
