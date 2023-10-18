@@ -82,35 +82,44 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         level.draw_room()
         i = i + 1
-        if (level.player.check_if_within_reach_player(level.current_room.enemy.xpos, level.current_room.enemy.ypos)):
-            level.draw_room_with_choices({
-            "Si hade": say_hi,
-            "Bli Assasin": become_assasin,
-            "Velg nytt rom": new_room,
-            "Beveg deg": movement,
-            "Angrep": player_combat
-        })
-        elif (level.player.check_if_within_reach_player(level.enemy.xpos, level.enemy.ypos) and level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
-            level.draw_room_with_choices({
-            "Si hade": say_hi,
-            "Bli Assasin": become_assasin,
-            "Velg nytt rom": new_room,
-            "Beveg deg": movement,
-            "Angrep": combat_loop
-        })
-        else: 
-            level.draw_room_with_choices({
-            "Si hade": say_hi,
-            "Bli Assasin": become_assasin,
-            "Velg nytt rom": new_room,
-            "Beveg deg": movement,
-        })
+    if (level.player.check_if_within_reach_player(level.current_room.enemy.xpos, level.current_room.enemy.ypos)):
+        level.draw_room_with_choices({
+        "Si hade": say_hi,
+        "Bli Assasin": become_assasin,
+        "Velg nytt rom": new_room,
+        "Beveg deg": movement,
+        "Angrep": player_combat
+    })
+    elif (level.player.check_if_within_reach_player(level.enemy.xpos, level.enemy.ypos) and level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
+        level.draw_room_with_choices({
+        "Si hade": say_hi,
+        "Bli Assasin": become_assasin,
+        "Velg nytt rom": new_room,
+        "Beveg deg": movement,
+        "Angrep": combat_loop
+    })
+    else: 
+        level.draw_room_with_choices({
+        "Si hade": say_hi,
+        "Bli Assasin": become_assasin,
+        "Velg nytt rom": new_room,
+        "Beveg deg": movement,
+    })
 
 def become_assasin():
     level.player = Assassin()
     new_room()
 
-
+def pick_class():
+    classes = [Assassin(), Knight(), Mercenary(), Sharpshooter()]
+    choices = []
+    for klasse in classes:
+        choices.append(klasse.name)
+    option, index = pick_with_keyboard(choices, "Velg en klasse: ")
+    level.player = classes[index]
+def stat():
+    level.pick_stat()
+    new_room()
 
 def new_room():
     level.pick_room()
