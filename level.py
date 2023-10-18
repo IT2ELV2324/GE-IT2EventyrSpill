@@ -113,6 +113,7 @@ class Level:
                 time.sleep(3)
                 break
             time.sleep(1)
+            self.display_stats()
 
 
     def pick_stat(self):
@@ -193,6 +194,25 @@ class Level:
             if (isSkipping):
                 break
             time.sleep(1)  # Wait a second before the next line
+    def display_stats(self):
+        system("cls")
+
+        stats = list(self.player.__dict__.values())
+
+        print("📊 Sånn ser statsene ut nå:")
+        print()
+        print(f"❤️  Din HP: {str(stats[0])}")
+        print(f"❤️  {self.current_room.enemy.name} HP: {self.current_room.enemy.hp}")
+        print(f"⚔️  Din Skade: {str(stats[1])}")
+        print(f"📏 Din Rekkevidde: {str(stats[2])}")
+        print(f"👟 Din Fart: {str(stats[3])}")
+        print()
+        print()
+        print("🔜 Trykk på enter for å fortsette")
+
+        
+
+        keyboard.wait("enter")
 
     def draw_room_with_choices(self, additional_choices):
         self.draw_room()
@@ -207,24 +227,10 @@ class Level:
             additional_choices[option]()
 
         if (option == "Se stats"):
-            system("cls")
-
-            stats = list(self.player.__dict__.values())
-
-            print("📊 Sånn ser statsene dine ut nå:")
-            print()
-            print(f"❤️ HP: {str(stats[0])}")
-            print(f"⚔️ Skade: {str(stats[1])}")
-            print(f"📏 Rekkevidde: {str(stats[2])}")
-            print(f"👟 Fart: {str(stats[3])}")
-            print()
-            print()
-            print("🔜 Trykk på enter for å fortsette")
+            self.display_stats()
+            self.draw_room_with_choices(additional_choices)
 
             
-
-            keyboard.wait("enter")
-            self.draw_room_with_choices(additional_choices)
 
         if (option == "Se brettet"):
             self.draw_room_with_choices(additional_choices)

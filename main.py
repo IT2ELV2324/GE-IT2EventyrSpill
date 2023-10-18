@@ -50,26 +50,27 @@ def movement():
 
     while i < level.player.speed:
         choices = []
-        choices.append("Avslutt")
         if (level.player.ypos != 0):
-            choices.append("Opp")
+            choices.append("⬆️  Opp")
         if (level.player.ypos != level.current_room.size_y-1):
-            choices.append("Ned")
+            choices.append("🔽 Ned")
         if (level.player.xpos != 0):
-            choices.append("Venstre")
+            choices.append("◀️  Venstre")
         if (level.player.xpos != level.current_room.size_x-1):
-            choices.append("Høyre")
+            choices.append("▶️  Høyre")
+        choices.append("✖️  Avslutt")
         option, index = pick_with_keyboard(choices, "Hvilken vei vil du gå? ")
+        
 
-        if option == "Opp":
+        if option == "⬆️  Opp":
             level.player.ypos = level.player.ypos - 1
-        elif option == "Ned":
+        elif option == "🔽 Ned":
             level.player.ypos = level.player.ypos + 1
-        elif option == "Venstre":
+        elif option == "◀️  Venstre":
             level.player.xpos = level.player.xpos - 1
-        elif option == "Høyre":
+        elif option == "▶️  Høyre":
             level.player.xpos = level.player.xpos + 1
-        elif option == "Avslutt":
+        elif option == "✖️  Avslutt":
             i = level.player.speed
             
         level.draw_room()
@@ -80,15 +81,10 @@ def movement():
             level.combat()
 
     level.draw_room_with_choices({
-    "Si hade": say_hi,
-    "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
 })
 
-def become_assasin():
-    level.player = Assassin()
-    new_room()
 
 def pick_class():
     classes = [Assassin(), Knight(), Mercenary(), Sharpshooter()]
@@ -102,8 +98,6 @@ def pick_class():
 def new_room():
     level.pick_room()
     level.draw_room_with_choices({
-    "Si hade": say_hi,
-    "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
 })
