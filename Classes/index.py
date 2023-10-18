@@ -1,8 +1,6 @@
 import math
-from os import system
 from Enemy.index import Enemy
 class Player:
-
    def __init__(self, hp=0, attack=0, name="",reach=0,speed=0,xpos=10,ypos=0, apperance="👨"):
       self.hp = hp
       self.attack = attack
