@@ -10,7 +10,8 @@ from Combat.index import combat_loop
 
 
 
-from level import Level
+from level import Level, pick_with_keyboard
+
 
 
 
@@ -32,6 +33,42 @@ level.print_story([
 ])
 def say_hi():
     print("hade!")
+def movement():
+    i = 0
+
+
+    while i < level.player.speed:
+        choices = []
+        if (level.player.ypos != 0):
+            choices.append("Opp")
+        if (level.player.ypos != level.current_room.size_y-1):
+            choices.append("Ned")
+        if (level.player.xpos != 0):
+            choices.append("Venstre")
+        if (level.player.xpos != level.current_room.size_x-1):
+            choices.append("Høyre")
+        option, index = pick_with_keyboard(choices)
+
+        if option == "Opp":
+            level.player.ypos = level.player.ypos - 1
+        elif option == "Ned":
+            level.player.ypos = level.player.ypos + 1
+        elif option == "Venstre":
+            level.player.xpos = level.player.xpos - 1
+        elif option == "Høyre":
+            level.player.xpos = level.player.xpos + 1
+        level.draw_room()
+        i = i + 1
+
+    level.draw_room_with_choices({
+    "Si hade": say_hi,
+    "Bli Assasin": become_assasin,
+    "Velg nytt rom": new_room,
+    "Beveg deg": movement,
+})
+    
+
+
 
 def become_assasin():
     level.player = Assassin()
@@ -43,6 +80,7 @@ def new_room():
     "Si hade": say_hi,
     "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
+    "Beveg deg": movement,
 })
 
 new_room()
