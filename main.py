@@ -1,13 +1,16 @@
 from Classes.index import Player
 from Classes.Assassin import Assassin
+from Classes.Knight import Knight
+from Classes.Mercenary import Mercenary
+from Classes.Sharpshooter import Sharpshooter
 
 from Room.Cave import Cave
 from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-from Combat.index import combat_loop
-from Classes.index import check_if_within_reach
+from combat.Player_combat import player_combat
+from Classes.index import check_if_within_reach_player
 
 
 from level import Level, pick_with_keyboard
@@ -54,7 +57,7 @@ def movement():
             choices.append("Venstre")
         if (level.player.xpos != level.current_room.size_x-1):
             choices.append("Høyre")
-        option, index = pick_with_keyboard(choices)
+        option, index = pick_with_keyboard(choices, "Hvilken vei vil du gå? ")
 
         if option == "Opp":
             level.player.ypos = level.player.ypos - 1
@@ -66,13 +69,13 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         level.draw_room()
         i = i + 1
-    if (check_if_within_reach == True):
+    if (check_if_within_reach_player == True):
         level.draw_room_with_choices({
         "Si hade": say_hi,
         "Bli Assasin": become_assasin,
         "Velg nytt rom": new_room,
         "Beveg deg": movement,
-        "Angrep": combat_loop
+        "Angrep": player_combat
     })
     else: 
         level.draw_room_with_choices({
@@ -83,7 +86,17 @@ def movement():
     })
         
 
+def pick_class():
+    classes = [Assassin(), Knight(), Mercenary(), Sharpshooter()]
+    choices = []
+    for klasse in classes:
+        choices.append(klasse.name)
+    option, index = pick_with_keyboard(choices, "Velg en klasse: ")
+    level.player = classes[index]
 
+def stat():
+    level.pick_stat()
+    new_room()
 
 def become_assasin():
     level.player = Assassin()
@@ -96,6 +109,8 @@ def new_room():
     "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
+    "ny stat": stat,
 })
 
+pick_class()
 new_room()
