@@ -17,12 +17,14 @@ def combat_loop():
         else:
             Player.hp = Player.hp - Enemy.attack
             print(f"{Enemy.name} slo deg og gjorde {Enemy.attack} dmg, du har {Player.hp} hp igjen." )
-        if Player.hp == 0 or Enemy.hp == 0:
-            if Player.hp <= 0:
-                print(f"Du ble drept av",Enemy.name)
-                #kjør evt GameOver funskjon?
-            if Enemy.hp <= 0:
-                print(f"Du drepte", Enemy.name)
-            #kjør feks. en funskjon som øker nivået og gjør Player sterkere her
-            break
+
+def gameOver():
+    if Player.hp == 0 or Enemy.hp == 0:
+        if Player.hp <= 0:
+            print(f"Du ble drept av",Enemy.name)
+            #kjør evt GameOver funskjon?
+        if Enemy.hp <= 0:
+            print(f"Du drepte", Enemy.name)
+        #kjør feks. en funskjon som øker nivået og gjør Player sterkere her
+
         
