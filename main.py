@@ -1,5 +1,8 @@
 from Classes.index import Player
 from Classes.Assassin import Assassin
+from Classes.Knight import Knight
+from Classes.Mercenary import Mercenary
+from Classes.Sharpshooter import Sharpshooter
 
 from Room.Cave import Cave
 from Room.Dungeon import Dungeon
@@ -54,7 +57,7 @@ def movement():
             choices.append("Venstre")
         if (level.player.xpos != level.current_room.size_x-1):
             choices.append("Høyre")
-        option, index = pick_with_keyboard(choices)
+        option, index = pick_with_keyboard(choices, "Hvilken vei vil du gå? ")
 
         if option == "Opp":
             level.player.ypos = level.player.ypos - 1
@@ -83,7 +86,17 @@ def movement():
     })
         
 
+def pick_class():
+    classes = [Assassin(), Knight(), Mercenary(), Sharpshooter()]
+    choices = []
+    for klasse in classes:
+        choices.append(klasse.name)
+    option, index = pick_with_keyboard(choices, "Velg en klasse: ")
+    level.player = classes[index]
 
+def stat():
+    level.pick_stat()
+    new_room()
 
 def become_assasin():
     level.player = Assassin()
@@ -96,6 +109,8 @@ def new_room():
     "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
+    "ny stat": stat,
 })
 
+pick_class()
 new_room()

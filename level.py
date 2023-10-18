@@ -26,13 +26,15 @@ class formats:
     Reset_Reverse = "\x1b[27m"
     Reset_Hidden = "\x1b[28m"
 
-def pick_with_keyboard(options):
+def pick_with_keyboard(options, context):
     time.sleep(0.2)
     current_index = 0
 
     # Display the initial menu
     def display_menu(index):
         print("\033c", end="")  # Clear the console
+        print(context)
+        print()
         for idx, option in enumerate(options):
             if idx == index:
                 print(f"=> {option}")  # Indicate the current selection with an arrow
@@ -70,8 +72,18 @@ class Level:
         self.player.xpos, self.player.ypos = self.defx, self.defy
         for room in self.rooms:
             choices.append(room.name)
-        option, index = pick_with_keyboard(choices)
+        option, index = pick_with_keyboard(choices, "Velg et rom å gå inn i: ")
         self.set_scene(index)
+
+    def pick_stat(self):
+
+        print("\033c", end="")  # Clear the console
+
+
+        option, index = pick_with_keyboard(["HP", "Skade", "Rekkevidde", 'Fart'], "Velg en stat å oppgradere: ")
+
+        stat_list = list(self.player.__dict__.keys())
+        exec(f"self.player.{stat_list[index]} += 1")
 
     def set_scene(self, room_index):
         self.current_room = self.rooms[room_index]
@@ -143,10 +155,30 @@ class Level:
         self.draw_room()
 
         
-        option, index = pick_with_keyboard([*additional_choices.keys(), "Se brettet"])
+        option, index = pick_with_keyboard([*additional_choices.keys(), "Se stats", "Se brettet"], "Hva vil du gjøre?")
 
         if (option in additional_choices.keys()):
             additional_choices[option]()
+
+        if (option == "Se stats"):
+            system("cls")
+
+            stats = list(self.player.__dict__.values())
+
+            print(f"Du er en {self.player.name}.")
+            print("Sånn ser statsene dine ut nå:")
+            print()
+            print(f"HP: {str(stats[0])}")
+            print(f"Skade: {str(stats[1])}")
+            print(f"Rekkevidde: {str(stats[2])}")
+            print(f"Fart: {str(stats[3])}")
+            
+            print()
+            print()
+            print("Trykk på enter for å fortsette")
+
+            keyboard.wait("enter")
+            self.draw_room_with_choices(additional_choices)
 
         if (option == "Se brettet"):
             self.draw_room_with_choices(additional_choices)
