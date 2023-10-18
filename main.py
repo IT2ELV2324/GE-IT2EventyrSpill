@@ -84,7 +84,6 @@ def movement():
     "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
-    "ny stat": stat,
 })
 
 def become_assasin():
@@ -98,9 +97,7 @@ def pick_class():
         choices.append(klasse.name)
     option, index = pick_with_keyboard(choices, "Velg en klasse: ")
     level.player = classes[index]
-def stat():
-    level.pick_stat()
-    new_room()
+
 
 def new_room():
     level.pick_room()
@@ -109,7 +106,6 @@ def new_room():
     "Bli Assasin": become_assasin,
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
-    "ny stat": stat,
 })
 
 pick_class()

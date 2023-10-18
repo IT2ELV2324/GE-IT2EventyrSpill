@@ -79,49 +79,54 @@ class Level:
     def combat(self):
         while self.player.hp > 0 and self.current_room.enemy.hp > 0:
             # Display combat menu
-            option, index = pick_with_keyboard(["Angrip", "Forsvar", "Løp"], "Velg en handling:")
+            option, index = pick_with_keyboard(["⚔️  Angrip", "🛡️  Forsvar", "🏃 Løp"], "Velg en handling:")
             print("\033c", end="")  # Clear the console
             
             
             # Player's turn
-            if option == "Angrip":
-                print(f"{self.player.name} angriper!")
+            if option == "⚔️  Angrip":
+                print(f"⚔️  {self.player.name} angriper!")
                 self.current_room.enemy.hp -= self.player.attack
                 if self.current_room.enemy.hp <= 0:
-                    print(f"{self.current_room.enemy.name} er død!")
+                    print(f"☠️ {self.current_room.enemy.name} er død!")
                     time.sleep(3)
+                    self.pick_stat()
                     self.rooms.remove(self.current_room)  # Remove the room
                     self.pick_room()
                     self.draw_room_with_choices(self.ads_cache)
                     return
-            elif option == "Forsvar":
+            elif option == "🛡️  Forsvar":
                 # Logic for defend can be added here
                 pass
-            elif option == "Løp":
-                print(f"{self.player.name} løper vekk!")
+            elif option == "🏃 Løp":
+                print(f"🏃 {self.player.name} løper vekk!")
+                time.sleep(1)
                 self.pick_room()
                 self.draw_room_with_choices(self.ads_cache)
                 return
             
             # Enemy's turn
-            print(f"{self.current_room.enemy.name} angriper!")
+            print(f"⚔️  {self.current_room.enemy.name} angriper!")
             self.player.hp -= self.current_room.enemy.attack
             if self.player.hp <= 0:
-                print(f"{self.player.name} er død!")
+                print(f"☠️  {self.player.name} er død!")
                 time.sleep(3)
                 break
             time.sleep(1)
 
 
     def pick_stat(self):
-
         print("\033c", end="")  # Clear the console
 
-
-        option, index = pick_with_keyboard(["HP", "Skade", "Rekkevidde", 'Fart'], "Velg en stat å oppgradere: ")
+ 
+        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
 
         stat_list = list(self.player.__dict__.keys())
-        exec(f"self.player.{stat_list[index]} += 1")
+        exec(f"self.player.{stat_list[index]} *= 1.5")
+
+        print(f"\n🎉 {option} har blitt oppgradert!")
+        time.sleep(1)
+
 
     def set_scene(self, room_index):
         self.current_room = self.rooms[room_index]
@@ -206,17 +211,17 @@ class Level:
 
             stats = list(self.player.__dict__.values())
 
-            print(f"Du er en {self.player.name}.")
-            print("Sånn ser statsene dine ut nå:")
+            print("📊 Sånn ser statsene dine ut nå:")
             print()
-            print(f"HP: {str(stats[0])}")
-            print(f"Skade: {str(stats[1])}")
-            print(f"Rekkevidde: {str(stats[2])}")
-            print(f"Fart: {str(stats[3])}")
+            print(f"❤️ HP: {str(stats[0])}")
+            print(f"⚔️ Skade: {str(stats[1])}")
+            print(f"📏 Rekkevidde: {str(stats[2])}")
+            print(f"👟 Fart: {str(stats[3])}")
+            print()
+            print()
+            print("🔜 Trykk på enter for å fortsette")
+
             
-            print()
-            print()
-            print("Trykk på enter for å fortsette")
 
             keyboard.wait("enter")
             self.draw_room_with_choices(additional_choices)
