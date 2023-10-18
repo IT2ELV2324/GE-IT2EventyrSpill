@@ -7,7 +7,7 @@ from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
 from Combat.index import combat_loop
-
+from Classes.index import check_if_within_reach
 
 
 from level import Level, pick_with_keyboard
@@ -15,12 +15,19 @@ from level import Level, pick_with_keyboard
 
 
 
-p = Player(xpos=2,ypos=2, speed=2)
+p = Player(xpos
+           =2,ypos=2, speed=2)
+
 
 cave = Cave()
+cave.enemy.xpos = 3
+cave.enemy.ypos = 3
 dungon = Dungeon()
+
 bridge = Bridge()
 field = Field()
+field.enemy.xpos = 3
+field.enemy.ypos = 3
 forest = Forest(sizex=50,sizey=25)
 
 level = Level([cave,dungon,bridge,field,forest],p)
@@ -59,14 +66,22 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         level.draw_room()
         i = i + 1
-
-    level.draw_room_with_choices({
-    "Si hade": say_hi,
-    "Bli Assasin": become_assasin,
-    "Velg nytt rom": new_room,
-    "Beveg deg": movement,
-})
-    
+    if (check_if_within_reach == True):
+        level.draw_room_with_choices({
+        "Si hade": say_hi,
+        "Bli Assasin": become_assasin,
+        "Velg nytt rom": new_room,
+        "Beveg deg": movement,
+        "Angrep": combat_loop
+    })
+    else: 
+        level.draw_room_with_choices({
+        "Si hade": say_hi,
+        "Bli Assasin": become_assasin,
+        "Velg nytt rom": new_room,
+        "Beveg deg": movement,
+    })
+        
 
 
 

@@ -62,8 +62,8 @@ class Level:
     def __init__(self, rooms, player, defx=0, defy=0):
         self.rooms = rooms
         self.player = player
-        self.defy = defy
-        self.defx = defx
+        self.defy = player.ypos
+        self.defx = player.xpos
 
     def pick_room(self):
         choices = []
@@ -175,7 +175,7 @@ class Level:
 
         if "Angrip" in option:
             if (option == "Angrip"):
-             self.combat.index.combat_loop            
+             self.combat.index.combat_loop()            
              self.draw_room_with_choices(additional_choices)
 
         if "Angrip" not in option:
