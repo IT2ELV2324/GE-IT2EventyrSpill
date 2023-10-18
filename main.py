@@ -6,6 +6,9 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
+from Combat.index import combat_loop
+
+
 
 from level import Level, pick_with_keyboard
 
