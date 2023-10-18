@@ -15,12 +15,19 @@ from level import Level, pick_with_keyboard
 
 
 
-p = Player(xpos=2,ypos=2, speed=2)
+p = Player(xpos
+           =2,ypos=2, speed=2)
+
 
 cave = Cave()
+cave.enemy.xpos = 3
+cave.enemy.ypos = 3
 dungon = Dungeon()
+
 bridge = Bridge()
 field = Field()
+field.enemy.xpos = 3
+field.enemy.ypos = 3
 forest = Forest(sizex=50,sizey=25)
 
 level = Level([cave,dungon,bridge,field,forest],p)

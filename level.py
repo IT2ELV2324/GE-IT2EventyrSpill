@@ -62,8 +62,8 @@ class Level:
     def __init__(self, rooms, player, defx=0, defy=0):
         self.rooms = rooms
         self.player = player
-        self.defy = defy
-        self.defx = defx
+        self.defy = player.ypos
+        self.defx = player.xpos
 
     def pick_room(self):
         choices = []
