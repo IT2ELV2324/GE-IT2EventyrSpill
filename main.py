@@ -6,8 +6,7 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-from Combat.Player_combat import player_combat
-from Classes.index import check_if_within_reach_player
+from Combat.index import combat_loop
 
 
 from level import Level, pick_with_keyboard
@@ -40,6 +39,20 @@ level.print_story([
 ])
 def say_hi():
     print("hade!")
+
+
+def player_combat():
+    if (level.player.check_if_within_reach_player(level.current_room.enemy.xpos, level.current_room.enemy.ypos)):
+        combat = True
+    while combat:
+        level.current_room.enemy.hp -= level.player.attack
+
+def enemy_combat():
+    if (level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
+        combat = True
+    while combat:
+        level.player.hp -= level.current_room.enemy.attack
+        combat = False
 def movement():
     i = 0
 
@@ -66,28 +79,35 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         level.draw_room()
         i = i + 1
-    if (check_if_within_reach_player == True):
-        level.draw_room_with_choices({
-        "Si hade": say_hi,
-        "Bli Assasin": become_assasin,
-        "Velg nytt rom": new_room,
-        "Beveg deg": movement,
-        "Angrep": player_combat
-    })
-    else: 
-        level.draw_room_with_choices({
-        "Si hade": say_hi,
-        "Bli Assasin": become_assasin,
-        "Velg nytt rom": new_room,
-        "Beveg deg": movement,
-    })
-        
-
-
+        if (level.player.check_if_within_reach_player(level.current_room.enemy.xpos, level.current_room.enemy.ypos)):
+            level.draw_room_with_choices({
+            "Si hade": say_hi,
+            "Bli Assasin": become_assasin,
+            "Velg nytt rom": new_room,
+            "Beveg deg": movement,
+            "Angrep": player_combat
+        })
+        elif (level.player.check_if_within_reach_player(level.enemy.xpos, level.enemy.ypos) and level.current_room.enemy.check_if_within_reach_enemy(level.player.xpos, level.player.ypos)):
+            level.draw_room_with_choices({
+            "Si hade": say_hi,
+            "Bli Assasin": become_assasin,
+            "Velg nytt rom": new_room,
+            "Beveg deg": movement,
+            "Angrep": combat_loop
+        })
+        else: 
+            level.draw_room_with_choices({
+            "Si hade": say_hi,
+            "Bli Assasin": become_assasin,
+            "Velg nytt rom": new_room,
+            "Beveg deg": movement,
+        })
 
 def become_assasin():
     level.player = Assassin()
     new_room()
+
+
 
 def new_room():
     level.pick_room()
@@ -97,5 +117,10 @@ def new_room():
     "Velg nytt rom": new_room,
     "Beveg deg": movement,
 })
+
+
+        
+
+
 
 new_room()

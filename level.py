@@ -3,8 +3,6 @@ import keyboard
 from os import system
 from Room.Cave import Cave
 from Classes.index import Player
-from Classes.index import check_if_within_reach
-from Combat.index import combat_loop
 import time
 from Enemy.index import Enemy
 
@@ -173,10 +171,3 @@ class Level:
 
             self.draw_room_with_choices(additional_choices)
 
-        if "Angrip" in option:
-            if (option == "Angrip"):
-             self.combat.index.combat_loop()            
-             self.draw_room_with_choices(additional_choices)
-
-        if "Angrip" not in option:
-            pass

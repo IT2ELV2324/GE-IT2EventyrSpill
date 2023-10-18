@@ -13,9 +13,11 @@ def combat_loop():
     while combat:
         if Player.speed > Enemy.speed:  
             Enemy.hp = Enemy.hp - Player.attack
+            Player.hp -= Enemy.attack
             print(f"Du slo {Enemy.name} og gjorde {Player.attack} dmg, {Enemy.name} har {Enemy.hp} hp igjen." )
         else:
             Player.hp = Player.hp - Enemy.attack
+            Enemy.hp -= Player.attack
             print(f"{Enemy.name} slo deg og gjorde {Enemy.attack} dmg, du har {Player.hp} hp igjen." )
 
 def gameOver():
