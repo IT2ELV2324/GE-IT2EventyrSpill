@@ -9,7 +9,8 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-
+import time
+import random
 
 
 from level import Level, pick_with_keyboard
@@ -72,13 +73,26 @@ def movement():
             level.player.xpos = level.player.xpos + 1
         elif option == "✖️  Avslutt":
             i = level.player.speed
+        
+        if (level.current_room.enemy.xpos == level.player.xpos and level.current_room.enemy.ypos == level.player.ypos):
+            print("\033c", end="") 
+            print(f"😮 Du ble angrepet av en {level.current_room.enemy.name}!")
+            time.sleep(1)
+            level.combat()
+        
+        else:
+            # A random chance the enemy will attack the player if enemy.check_if_within_reach_of_player returns True. Higher chance the closer the player is to the enemy.
+            if level.current_room.enemy.check_if_within_reach_of_player(level.player.xpos, level.player.ypos):
+                dif = level.current_room.enemy.dif_to_player
+                chance = 1 - (dif / level.current_room.enemy.reach)
+                if random.random() < chance:
+                    print("\033c", end="") 
+                    print(f"😮 Du ble angrepet av en {level.current_room.enemy.name}!")
+                    time.sleep(1)
+                    level.combat()
             
         level.draw_room()
         i = i + 1
-    if level.is_enemy_within_reach():
-        choice = input("You are within reach of an enemy. Do you want to engage in combat? (yes/no): ")
-        if choice.lower() == 'yes':
-            level.combat()
 
     level.draw_room_with_choices({
     "Velg nytt rom": new_room,

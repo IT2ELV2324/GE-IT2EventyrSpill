@@ -1,10 +1,8 @@
 import keyboard
 
 from os import system
-from Room.Cave import Cave
-from Classes.index import Player
+import random
 import time
-from Enemy.index import Enemy
 
 class formats:
     Bold = "\x1b[1m"
@@ -75,14 +73,16 @@ class Level:
 
     def is_enemy_within_reach(self):
         return self.player.check_if_within_reach_player(self.current_room.enemy.xpos, self.current_room.enemy.ypos)
-    
+
     def combat(self):
+        player_defending = False  # Track if the player is currently defending
+        enemy_defending = False  # Track if the enemy is currently defending
+
         while self.player.hp > 0 and self.current_room.enemy.hp > 0:
             # Display combat menu
             option, index = pick_with_keyboard(["⚔️  Angrip", "🛡️  Forsvar", "🏃 Løp"], "Velg en handling:")
             print("\033c", end="")  # Clear the console
-            
-            
+
             # Player's turn
             if option == "⚔️  Angrip":
                 print(f"⚔️  {self.player.name} angriper!")
@@ -95,35 +95,91 @@ class Level:
                     self.pick_room()
                     self.draw_room_with_choices(self.ads_cache)
                     return
+
             elif option == "🛡️  Forsvar":
-                # Logic for defend can be added here
-                pass
+                if random.random() <= 0.75:  # 75% chance
+                    heal_amount = 1.5  # Assuming a fixed heal value, adjust as needed
+                    self.player.hp += heal_amount
+                    print(f"🛡️  {self.player.name} forsvarte og helbredet seg selv for {heal_amount} poeng!")
+                else:
+                    player_defending = True
+                    print(f"🛡️  {self.player.name} forbereder seg på å forsvare!")
+
             elif option == "🏃 Løp":
                 print(f"🏃 {self.player.name} løper vekk!")
                 time.sleep(1)
                 self.pick_room()
                 self.draw_room_with_choices(self.ads_cache)
                 return
-            
+
             # Enemy's turn
-            print(f"⚔️  {self.current_room.enemy.name} angriper!")
-            self.player.hp -= self.current_room.enemy.attack
-            if self.player.hp <= 0:
-                print(f"☠️  {self.player.name} er død!")
+            if self.current_room.enemy.wants_to_defend(self.player.attack):
+                if random.random() <= 0.75:  # 75% chance
+                    heal_amount = 1.5  # Assuming a fixed heal value for the enemy, adjust as needed
+                    self.current_room.enemy.hp += heal_amount
+                    print(f"🛡️ {self.current_room.enemy.name} forsvarte og helbredet seg selv for {heal_amount} poeng!")
+                else:
+                    enemy_defending = True
+                    print(f"{self.current_room.enemy.name} forbereder seg på å forsvare!")
+                time.sleep(2)
+            elif self.current_room.enemy.wants_to_flee():
+                print(f"😨 {self.current_room.enemy.name} ser redd ut og prøver å løpe vekk!")
                 time.sleep(3)
-                break
+                # Calculate potential new positions
+                potential_positions = {
+                    "up": (self.current_room.enemy.xpos, max(0, self.current_room.enemy.ypos - self.current_room.enemy.speed)),
+                    "down": (self.current_room.enemy.xpos, min(self.current_room.size_y-1, self.current_room.enemy.ypos + self.current_room.enemy.speed)),
+                    "left": (max(0, self.current_room.enemy.xpos - self.current_room.enemy.speed), self.current_room.enemy.ypos),
+                    "right": (min(self.current_room.size_x-1, self.current_room.enemy.xpos + self.current_room.enemy.speed), self.current_room.enemy.ypos)
+                }
+
+                # Calculate the distances to the player for each potential position
+                distances = {
+                    direction: ((self.player.xpos - x)**2 + (self.player.ypos - y)**2)**0.5
+                    for direction, (x, y) in potential_positions.items()
+                }
+
+                # Determine the direction with the maximum distance from the player
+                flee_direction = max(distances, key=distances.get)
+
+                # Update the enemy's position
+                self.current_room.enemy.xpos, self.current_room.enemy.ypos = potential_positions[flee_direction]
+                
+                # Close the combat menu and let the player move
+                self.draw_room_with_choices(self.ads_cache)
+                return
+            else:
+                print(f"⚔️  {self.current_room.enemy.name} angriper!")
+                if player_defending:  # If player chose to defend
+                    damage_taken = self.current_room.enemy.attack / 2  # Half damage
+                    self.player.hp -= damage_taken
+                    print(f"🛡️  {self.player.name} tok bare {damage_taken} skade på grunn av forsvar!")
+                    player_defending = False  # Reset the defending flag
+                    time.sleep(2)
+                else:
+                    if enemy_defending:
+                        damage_taken = self.player.attack / 2  # Half damage
+                        self.current_room.enemy.hp -= damage_taken
+                        print(f"{self.current_room.enemy.name} tok bare {damage_taken} skade på grunn av forsvar!")
+                        enemy_defending = False  # Reset the defending flag
+                        time.sleep(2)
+                    else:
+                        self.current_room.enemy.hp -= self.player.attack
+                        time.sleep(1)
+            
             time.sleep(1)
             self.display_stats()
+
 
 
     def pick_stat(self):
         print("\033c", end="")  # Clear the console
 
  
-        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
+        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å dobble: ")
 
         stat_list = list(self.player.__dict__.keys())
-        exec(f"self.player.{stat_list[index]} *= 1.5")
+        exec(f"self.player.{stat_list[index]} *= 2")
 
         print(f"\n🎉 {option} har blitt oppgradert!")
         time.sleep(1)
