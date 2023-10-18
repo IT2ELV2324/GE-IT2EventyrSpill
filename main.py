@@ -6,7 +6,7 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-from Combat.Player_combat import player_combat
+from combat.Player_combat import player_combat
 from Classes.index import check_if_within_reach_player
 
 
