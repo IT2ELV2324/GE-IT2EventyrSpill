@@ -21,7 +21,7 @@ canOpenInNew = True
 if "--no-cmd" not in sys.argv:
     print("\033c", end="")  # Clear the console
     ex = sys.executable
-    if (ex == ""):
+    if (ex == "") or str(ex).find("\\"):
         # Find if the user has python, py or python3 installed
         if os.system("py -V") == 0:
             ex = "py"
