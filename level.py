@@ -307,6 +307,10 @@ class Level:
                 
 
         i = 1
+        # Make sure self.current_room.material is always 2 characters long
+        if len(self.current_room.material) == 1:
+            self.current_room.material += " "
+
         for y in range(0, self.current_room.size_y):
             if (y == 0):
                 for x in range(0, self.current_room.size_x+2):

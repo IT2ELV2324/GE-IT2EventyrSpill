@@ -22,6 +22,8 @@ if "--no-cmd" not in sys.argv:
     print("\033c", end="")  # Clear the console
     ex = sys.executable
     if (ex == "") or str(ex).find("\\"):
+        print("🔍 Sjekker om du har python installert...")
+        time.sleep(1)
         # Find if the user has python, py or python3 installed
         if os.system("py -V") == 0:
             ex = "py"
@@ -31,27 +33,38 @@ if "--no-cmd" not in sys.argv:
            ex = "python3"
         else:
             canOpenInNew = False
+    
     if not canOpenInNew:
         print("🚫 Kunne ikke åpne spillet i et nytt vindu. Åpner spillet i dette vinduet.")
         time.sleep(1)
+        print("\033c", end="")
     else:
-        print("💻 Åpner spillet i nytt vindu...")
-        os.system(f"start cmd /k {ex} main.py --no-cmd")
-        time.sleep(0.5)
-        print("💻 Spillet er åpnet i et nytt vindu.")
-        time.sleep(0.5)
-        print("🤔 Dersom det ikke åpnet seg et nytt vindu, press space for å kjøre spillet i dette vinduet.")
-        time.sleep(0.25)
-        print("🔜 Press enter for å avslutte dette vinduet.")
-        
-        while True:
-            if keyboard.is_pressed("space"):
-                break
-            elif keyboard.is_pressed("enter"):
-                os.system("cls")
-                os.system("exit")
-                sys.exit()
-            time.sleep(0.1)
+        option, index = pick_with_keyboard(["✅ Ja", "❌ Nei"], "Vil du åpne spillet i et nytt vindu? På noen systemer kan dette gjøre at emojies ikke vises riktig. ")
+        if (option == "❌ Nei"):
+            print("\033c", end="")
+            canOpenInNew = False
+            print("✅ Spillet vil åpne i dette vinduet.")
+            time.sleep(1)
+            print("\033c", end="")
+        else:
+            print("\033c", end="")
+            print("💻 Åpner spillet i nytt vindu...")
+            os.system(f"start cmd /k {ex} main.py --no-cmd")
+            time.sleep(0.5)
+            print("💻 Spillet er åpnet i et nytt vindu.")
+            time.sleep(0.5)
+            print("🤔 Dersom det ikke åpnet seg et nytt vindu, press space for å kjøre spillet i dette vinduet.")
+            time.sleep(0.25)
+            print("🔜 Press enter for å avslutte dette vinduet.")
+            
+            while True:
+                if keyboard.is_pressed("space"):
+                    break
+                elif keyboard.is_pressed("enter"):
+                    os.system("cls")
+                    os.system("exit")
+                    sys.exit()
+                time.sleep(0.1)
 
 
 p = Player(xpos
