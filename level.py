@@ -177,8 +177,8 @@ class Level:
     def pick_stat(self):
         print("\033c", end="")  # Clear the console
         def f(x):
-            L = 20.0
-            k = 0.1
+            L = 10.0
+            k = 0.05
             x0 = 10
             return L / (1 + math.exp(-k * (x - x0)))
  
