@@ -2,6 +2,7 @@ import keyboard
 
 from os import system
 import random
+import math
 import time
 
 class formats:
@@ -117,10 +118,10 @@ class Level:
                 if random.random() <= 0.75:  # 75% chance
                     heal_amount = 1.5  # Assuming a fixed heal value for the enemy, adjust as needed
                     self.current_room.enemy.hp += heal_amount
-                    print(f"🛡️ {self.current_room.enemy.name} forsvarte og helbredet seg selv for {heal_amount} poeng!")
+                    print(f"🛡️  {self.current_room.enemy.name} forsvarte og helbredet seg selv for {heal_amount} poeng!")
                 else:
                     enemy_defending = True
-                    print(f"{self.current_room.enemy.name} forbereder seg på å forsvare!")
+                    print(f"🛡️  {self.current_room.enemy.name} forbereder seg på å forsvare!")
                 time.sleep(2)
             elif self.current_room.enemy.wants_to_flee():
                 print(f"😨 {self.current_room.enemy.name} ser redd ut og prøver å løpe vekk!")
@@ -157,10 +158,11 @@ class Level:
                     player_defending = False  # Reset the defending flag
                     time.sleep(2)
                 else:
+                    self.player.hp -= self.current_room.enemy.attack
                     if enemy_defending:
                         damage_taken = self.player.attack / 2  # Half damage
                         self.current_room.enemy.hp -= damage_taken
-                        print(f"{self.current_room.enemy.name} tok bare {damage_taken} skade på grunn av forsvar!")
+                        print(f"🛡️  {self.current_room.enemy.name} tok bare {damage_taken} skade på grunn av forsvar!")
                         enemy_defending = False  # Reset the defending flag
                         time.sleep(2)
                     else:
@@ -174,12 +176,18 @@ class Level:
 
     def pick_stat(self):
         print("\033c", end="")  # Clear the console
-
+        def f(x):
+            L = 20.0
+            k = 0.6
+            x0 = 6
+            return L / (1 + math.exp(-k * (x - x0)))
  
-        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å dobble: ")
+        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
 
         stat_list = list(self.player.__dict__.keys())
-        exec(f"self.player.{stat_list[index]} *= 2")
+        current_value = getattr(self.player, stat_list[index])
+        new_value = round( f(current_value))
+        setattr(self.player, stat_list[index], new_value)
 
         print(f"\n🎉 {option} har blitt oppgradert!")
         time.sleep(1)
