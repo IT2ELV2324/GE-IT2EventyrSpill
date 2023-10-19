@@ -17,25 +17,40 @@ from level import Level, pick_with_keyboard
 
 # Check if the commands "py, python, or python3" is available. If it is, run start cmd /k (python, py or python3) main.py. If the flag --no-cmd is passed, continue without opening cmd (to avoid opening cmd twice).
 
+canOpenInNew = True
 if "--no-cmd" not in sys.argv:
     print("\033c", end="")  # Clear the console
-    print("💻 Åpner spillet i nytt vindu...")
-    os.system(f"start cmd /k {sys.executable} main.py --no-cmd")
-    time.sleep(0.5)
-    print("💻 Spillet er åpnet i et nytt vindu.")
-    time.sleep(0.5)
-    print("🤔 Dersom det ikke åpnet seg et nytt vindu, press space for å kjøre spillet i dette vinduet.")
-    time.sleep(0.25)
-    print("🔜 Press enter for å avslutte dette vinduet.")
-    
-    while True:
-        if keyboard.is_pressed("space"):
-            break
-        elif keyboard.is_pressed("enter"):
-            os.system("cls")
-            os.system("exit")
-            sys.exit()
-        time.sleep(0.1)
+    if (sys.executable == ""):
+        # Find if the user has python, py or python3 installed
+        if os.system("py -V") == 0:
+            sys.executable = "py"
+        elif os.system("python -V") == 0:
+            sys.executable = "python"
+        elif os.system("python3 -V") == 0:
+            sys.executable = "python3"
+        else:
+            canOpenInNew = False
+    if not canOpenInNew:
+        print("🚫 Kunne ikke åpne spillet i et nytt vindu. Åpner spillet i dette vinduet.")
+        time.sleep(1)
+    else:
+        print("💻 Åpner spillet i nytt vindu...")
+        os.system(f"start cmd /k {sys.executable} main.py --no-cmd")
+        time.sleep(0.5)
+        print("💻 Spillet er åpnet i et nytt vindu.")
+        time.sleep(0.5)
+        print("🤔 Dersom det ikke åpnet seg et nytt vindu, press space for å kjøre spillet i dette vinduet.")
+        time.sleep(0.25)
+        print("🔜 Press enter for å avslutte dette vinduet.")
+        
+        while True:
+            if keyboard.is_pressed("space"):
+                break
+            elif keyboard.is_pressed("enter"):
+                os.system("cls")
+                os.system("exit")
+                sys.exit()
+            time.sleep(0.1)
 
 
 p = Player(xpos
