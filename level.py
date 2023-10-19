@@ -119,8 +119,7 @@ class Level:
                     print(" 😭 Du har tapt spillet! ")
                     time.sleep(2)
                     return
-                else: 
-                    self.display_stats()
+
             
                 # Player's turn
                 if option == "⚔️  Angrip":
@@ -150,7 +149,9 @@ class Level:
                     self.pick_room()
                     self.draw_room_with_choices(self.ads_cache)
                     return
-
+                else:
+                    self.display_stats()
+                
             else:
                 # Player's turn
                 if option == "⚔️  Angrip":
