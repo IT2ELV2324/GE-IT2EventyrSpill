@@ -20,14 +20,15 @@ from level import Level, pick_with_keyboard
 canOpenInNew = True
 if "--no-cmd" not in sys.argv:
     print("\033c", end="")  # Clear the console
-    if (sys.executable == ""):
+    ex = sys.executable
+    if (ex == ""):
         # Find if the user has python, py or python3 installed
         if os.system("py -V") == 0:
-            sys.executable = "py"
+            ex = "py"
         elif os.system("python -V") == 0:
-            sys.executable = "python"
+           ex = "python"
         elif os.system("python3 -V") == 0:
-            sys.executable = "python3"
+           ex = "python3"
         else:
             canOpenInNew = False
     if not canOpenInNew:
@@ -35,7 +36,7 @@ if "--no-cmd" not in sys.argv:
         time.sleep(1)
     else:
         print("💻 Åpner spillet i nytt vindu...")
-        os.system(f"start cmd /k {sys.executable} main.py --no-cmd")
+        os.system(f"start cmd /k {ex} main.py --no-cmd")
         time.sleep(0.5)
         print("💻 Spillet er åpnet i et nytt vindu.")
         time.sleep(0.5)
