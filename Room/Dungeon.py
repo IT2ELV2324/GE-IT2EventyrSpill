@@ -8,4 +8,4 @@ enemies = [Goblin, Sentinel, Warrior]
 
 class Dungeon(Room):
     def __init__(self, name="Dungeon",  description="Du befinner deg nå i en dungeon og ser en fiende foran deg",  enemy= enemies[randint(0, len(enemies)-1)](), sizex = 6, sizey = 5):
-        super().__init__(name, description, enemy, sizex, sizey,material="⛓️")
+        super().__init__(name, description, enemy, sizex, sizey,material="⛓️ ")
