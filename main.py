@@ -9,13 +9,31 @@ from Room.Dungeon import Dungeon
 from Room.Bridge import Bridge
 from Room.Field import Field
 from Room.Forest import Forest
-import time
-import random
+import time,sys,os,random,keyboard
+
 
 
 from level import Level, pick_with_keyboard
 
+# Check if the commands "py, python, or python3" is available. If it is, run start cmd /k (python, py or python3) main.py. If the flag --no-cmd is passed, continue without opening cmd (to avoid opening cmd twice).
 
+if "--no-cmd" not in sys.argv:
+    print("\033c", end="")  # Clear the console
+    print("💻 Åpner spillet i nytt vindu...")
+    os.system(f"start cmd /k {sys.executable} main.py --no-cmd")
+    time.sleep(0.5)
+    print("💻 Spillet er åpnet i et nytt vindu.")
+    time.sleep(0.5)
+    print("🤔 Dersom det ikke åpnet seg et nytt vindu, press space for å kjøre spillet i dette vinduet.")
+    time.sleep(0.25)
+    print("🔜 Press enter for å avslutte dette vinduet.")
+    
+    while True:
+        if keyboard.is_pressed("space"):
+            break
+        elif keyboard.is_pressed("enter"):
+            sys.exit()
+        time.sleep(0.1)
 
 
 p = Player(xpos

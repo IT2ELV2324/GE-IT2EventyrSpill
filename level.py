@@ -73,6 +73,7 @@ class Level:
             print("\033c", end="")  # Clear the console
             print(" 🥳 Du har vunnet spillet! ")
             time.sleep(2)
+            exit()
             return
         option, index = pick_with_keyboard(choices, "Velg et rom å gå inn i: ")
         self.set_scene(index)
@@ -94,7 +95,7 @@ class Level:
                 print(f"⚔️  {self.player.name} angriper!")
                 self.current_room.enemy.hp -= self.player.attack
                 if self.current_room.enemy.hp <= 0:
-                    print(f"☠️ {self.current_room.enemy.name} er død!")
+                    print(f"☠️  {self.current_room.enemy.name} er død!")
                     time.sleep(3)
                     self.pick_stat()
                     self.rooms.remove(self.current_room)  # Remove the room
@@ -177,9 +178,17 @@ class Level:
             time.sleep(1)
             if self.player.hp <= 0:
                 print("\033c", end="")  # Clear the console
-                print(f"☠️ {self.player.name} er død!")
-                print(" 😭 Du har tapt spillet! ")
+                print(f"☠️  {self.player.name} er død!")
+                print("😭 Du har tapt spillet! ")
                 time.sleep(2)
+                return
+            elif self.current_room.enemy.hp <= 0:
+                print(f"☠️  {self.current_room.enemy.name} er død!")
+                time.sleep(3)
+                self.pick_stat()
+                self.rooms.remove(self.current_room)  # Remove the room
+                self.pick_room()
+                self.draw_room_with_choices(self.ads_cache)
                 return
             else: 
                 self.display_stats()
@@ -194,7 +203,7 @@ class Level:
             x0 = 10
             return L / (1 + math.e**(k*(x-x0)))
  
-        option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
+        option, index = pick_with_keyboard([f"❤️  HP ({self.player.hp})", f"⚔️  Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
 
         stat_list = list(self.player.__dict__.keys())
         current_value = getattr(self.player, stat_list[index])
@@ -209,7 +218,7 @@ class Level:
             time.sleep(2)
             self.pick_stat()
         else:
-            print(f"\n🎉 {option} har blitt oppgradert!")
+            print(f"\n🎉 {option.replace(str(current_value), str(new_value))} har blitt oppgradert!")
             time.sleep(1)
 
 
@@ -300,9 +309,9 @@ class Level:
 
     def draw_room_with_choices(self, additional_choices):
         self.draw_room()
+        self.ads_cache = additional_choices
 
         if self.is_enemy_within_reach():
-            self.ads_cache = additional_choices
             additional_choices["Angrip"] = self.combat
         
         option, index = pick_with_keyboard([*additional_choices.keys(), "Se stats", "Se brettet"], "Hva vil du gjøre?")
