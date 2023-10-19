@@ -69,6 +69,11 @@ class Level:
         self.player.xpos, self.player.ypos = self.defx, self.defy
         for room in self.rooms:
             choices.append(room.name)
+        if (len(choices) <= 0):
+            print("\033c", end="")  # Clear the console
+            print(" 🥳 Du har vunnet spillet! ")
+            time.sleep(2)
+            return
         option, index = pick_with_keyboard(choices, "Velg et rom å gå inn i: ")
         self.set_scene(index)
 
@@ -170,27 +175,42 @@ class Level:
                         time.sleep(1)
             
             time.sleep(1)
-            self.display_stats()
+            if self.player.hp <= 0:
+                print("\033c", end="")  # Clear the console
+                print(f"☠️ {self.player.name} er død!")
+                print(" 😭 Du har tapt spillet! ")
+                time.sleep(2)
+                return
+            else: 
+                self.display_stats()
 
 
 
     def pick_stat(self):
         print("\033c", end="")  # Clear the console
         def f(x):
-            L = 10.0
+            L =5
             k = 0.05
             x0 = 10
-            return L / (1 + math.exp(-k * (x - x0)))
+            return L / (1 + math.e**(k*(x-x0)))
  
         option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
 
         stat_list = list(self.player.__dict__.keys())
         current_value = getattr(self.player, stat_list[index])
-        new_value = round( f(current_value))
+        new_value =   round(current_value*
+        f(current_value))
         setattr(self.player, stat_list[index], new_value)
 
-        print(f"\n🎉 {option} har blitt oppgradert!")
-        time.sleep(1)
+        new_value = current_value if new_value <= current_value else new_value
+
+        if (new_value == current_value):
+            print(f"❗  Du har nådd maks for {option}")
+            time.sleep(2)
+            self.pick_stat()
+        else:
+            print(f"\n🎉 {option} har blitt oppgradert!")
+            time.sleep(1)
 
 
     def set_scene(self, room_index):
