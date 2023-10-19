@@ -178,8 +178,8 @@ class Level:
         print("\033c", end="")  # Clear the console
         def f(x):
             L = 20.0
-            k = 0.6
-            x0 = 6
+            k = 0.1
+            x0 = 10
             return L / (1 + math.exp(-k * (x - x0)))
  
         option, index = pick_with_keyboard([f"❤️ HP ({self.player.hp})", f"⚔️ Skade ({self.player.attack})", f"📏 Rekkevidde ({self.player.reach})", f'👟 Fart {self.player.speed}'], "📈 Velg en stat å oppgradere: ")
