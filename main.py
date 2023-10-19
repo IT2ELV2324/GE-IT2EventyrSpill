@@ -32,6 +32,8 @@ if "--no-cmd" not in sys.argv:
         if keyboard.is_pressed("space"):
             break
         elif keyboard.is_pressed("enter"):
+            os.system("cls")
+            os.system("exit")
             sys.exit()
         time.sleep(0.1)
 
