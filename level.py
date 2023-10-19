@@ -30,6 +30,7 @@ def pick_with_keyboard(options, context):
     # Display the initial menu
     def display_menu(index):
         print("\033c", end="")  # Clear the console
+        system("cls")
         print(context)
         print()
         for idx, option in enumerate(options):
